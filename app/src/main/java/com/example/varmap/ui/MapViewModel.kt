@@ -72,7 +72,6 @@ class MapViewModel(
             }
         }
 
-        // --- Остальные подписки ---
         viewModelScope.launch {
             repo.pointsFlow.collect { list ->
                 _ui.update { it.copy(points = list) }
@@ -99,14 +98,12 @@ class MapViewModel(
             }.launchIn(this)
         }
 
-        // Слушаем локальные точки из БД
         viewModelScope.launch {
             repo.pointsFlow.collect { list ->
                 _ui.update { it.copy(points = list) }
             }
         }
 
-        // Сохранение UI состояния
         viewModelScope.launch {
             ui.collect { s ->
                 state[Keys.LAT] = s.centerLat
@@ -217,3 +214,4 @@ class MapViewModel(
     }
 
 }
+
