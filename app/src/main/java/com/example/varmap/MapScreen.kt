@@ -83,7 +83,6 @@ fun MapScreen(vm: MapViewModel) {
         }
     }
 
-    // --- Вычисление видимых точек ---
     val visiblePoints by remember(ui.points, mapView) {
         derivedStateOf {
             val map = mapView ?: return@derivedStateOf emptyList<PointEntity>()
@@ -149,7 +148,7 @@ fun MapScreen(vm: MapViewModel) {
                 Icon(Icons.Default.Place, contentDescription = "Прицел", tint = Color.Red, modifier = Modifier.size(32.dp))
             }
 
-            // Внутри Box, после блока с координатами центра
+            
             Row(
                 modifier = Modifier
                     .align(Alignment.TopStart)
@@ -214,7 +213,6 @@ fun MapScreen(vm: MapViewModel) {
                         .padding(12.dp),
                 ) {
                     if (ui.selectedPoint != null) {
-                        // Показываем выбранную точку
                         val point = ui.selectedPoint!!
                         Text("Выбрана точка:", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
                         Text(point.name, style = MaterialTheme.typography.bodySmall)
@@ -222,7 +220,6 @@ fun MapScreen(vm: MapViewModel) {
                         Text("Широта: ${"%.6f".format(point.latitude)}", style = MaterialTheme.typography.bodySmall)
                         Text("Долгота: ${"%.6f".format(point.longitude)}", style = MaterialTheme.typography.bodySmall)
                     } else {
-                        // Показываем центр карты
                         Text("Центр карты:", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
                         Text("Широта: ${"%.6f".format(ui.centerLat)}", style = MaterialTheme.typography.bodySmall)
                         Text("Долгота: ${"%.6f".format(ui.centerLon)}", style = MaterialTheme.typography.bodySmall)
@@ -230,7 +227,6 @@ fun MapScreen(vm: MapViewModel) {
                 }
             }
 
-            // Кнопка Zoom In
             IconButton(
                 onClick = { mapView?.controller?.zoomIn() },
                 modifier = Modifier
@@ -243,7 +239,6 @@ fun MapScreen(vm: MapViewModel) {
                 Icon(Icons.Default.Add, contentDescription = "Приблизить", tint = Color.Black)
             }
 
-// Кнопка Zoom Out
             IconButton(
                 onClick = { mapView?.controller?.zoomOut() },
                 modifier = Modifier
@@ -256,7 +251,6 @@ fun MapScreen(vm: MapViewModel) {
                 Icon(Icons.Default.Remove, contentDescription = "Отдалить", tint = Color.Black)
             }
 
-// Кнопка "Моё местоположение"
             IconButton(
                 onClick = {
                     val overlay = mapView?.overlays?.firstOrNull { it is MyLocationNewOverlay } as? MyLocationNewOverlay
@@ -273,7 +267,6 @@ fun MapScreen(vm: MapViewModel) {
                 Icon(Icons.Default.Place, contentDescription = "Моё местоположение", tint = Color.Black)
             }
 
-            // --- Панель снизу ---
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -304,7 +297,6 @@ fun MapScreen(vm: MapViewModel) {
             }
         }
 
-        // --- Чат ---
         if (ui.showChatDrawer) {
             Box(
                 modifier = Modifier
@@ -333,7 +325,6 @@ fun MapScreen(vm: MapViewModel) {
             }
         }
 
-        // --- Диалог добавления точки ---
         ui.showAddPointDialog?.let { (lat, lon) ->
             AddPointDialog(
                 lat = lat,
@@ -350,4 +341,5 @@ fun getVisiblePoints(mapView: MapView, allPoints: List<PointEntity>): List<Point
         boundingBox.contains(GeoPoint(point.latitude, point.longitude))
     }
 }
+
 private fun Double.format(digits: Int) = "%.${digits}f".format(this)
